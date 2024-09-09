@@ -26,12 +26,12 @@
 <h2>Asignación de Variables</h2>
 
 <?php
-// Asignaciones iniciales
+// Asignacion inicial de variables 
 $a = "ManejadorSQL";
 $b = 'MySQL';
 $c = &$a;
 
-// Mostrar el contenido inicial
+// Mostrar el contenido de las variables al inicio
 echo "<p>Valores iniciales:</p>";
 echo "<ul>";
 echo "<li>\$a: "; var_dump($a); echo "</li>";
@@ -126,5 +126,103 @@ echo '</ul>';
 // Liberar variables
 unset($a, $b, $c, $z);
 ?>
+
+<?php
+// Parte 5: Conversión de Tipos
+echo '<h2>Conversión de Tipos</h2>';
+echo '<ul>';
+
+$a = '7 personas';
+$b = (integer) $a;
+echo '<li>Después de convertir $a a entero, $b es: '; 
+var_dump($b); 
+echo '</li>';
+
+$a = '9E3';
+$c = (double) $a;
+echo '<li>Después de convertir $a a doble, $c es: '; 
+var_dump($c); 
+echo '</li>';
+
+echo '</ul>';
+
+// Parte 6: Valores Booleanos
+echo '<h2>Valores Booleanos</h2>';
+echo '<ul>';
+
+$a = '0';
+$b = 'TRUE';
+$c = FALSE;
+$d = ($a OR $b);
+$e = ($a AND $c);
+$f = ($a XOR $b);
+
+echo '<li>El valor booleano de $a es: '; 
+var_dump($a); 
+echo '</li>';
+
+echo '<li>El valor booleano de $b es: '; 
+var_dump($b); 
+echo '</li>';
+
+echo '<li>El valor booleano de $c es: '; 
+var_dump($c); 
+echo '</li>';
+
+echo '<li>El valor booleano de $d es: '; 
+var_dump($d); 
+echo '</li>';
+
+echo '<li>El valor booleano de $e es: '; 
+var_dump($e); 
+echo '</li>';
+
+echo '<li>El valor booleano de $f es: '; 
+var_dump($f); 
+echo '</li>';
+
+// Función para mostrar valores booleanos como texto
+function boolean_to_text($value) {
+    return $value ? 'TRUE' : 'FALSE';
+}
+
+echo '<h2>Valores booleanos como texto</h2>';
+echo '<ul>';
+echo '<li>$c como texto: ' . boolean_to_text($c) . '</li>';
+echo '<li>$e como texto: ' . boolean_to_text($e) . '</li>';
+echo '</ul>';
+
+// Liberar variables
+unset($a, $b, $c, $d, $e, $f, $z);
+?>
+
+<?php
+// Parte 7: Uso de $_SERVER para obtener información del servidor y cliente
+echo '<h2>Información del Servidor y Cliente</h2>';
+echo '<ul>';
+
+// a. La versión de Apache y PHP
+echo '<li>Versión de Apache: ';
+echo isset($_SERVER['SERVER_SOFTWARE']) ? $_SERVER['SERVER_SOFTWARE'] : 'No disponible';
+echo '</li>';
+
+echo '<li>Versión de PHP: ';
+echo PHP_VERSION;
+echo '</li>';
+
+// b. El nombre del sistema operativo (servidor)
+echo '<li>Sistema Operativo del Servidor: ';
+echo PHP_OS;
+echo '</li>';
+
+// c. El idioma del navegador (cliente)
+echo '<li>Idioma del Navegador: ';
+echo isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : 'No disponible';
+echo '</li>';
+
+echo '</ul>';
+
+?>
+
 </body>
 </html>
