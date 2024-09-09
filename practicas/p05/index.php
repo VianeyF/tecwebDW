@@ -6,8 +6,8 @@
     <title>P5 Verificacion variables PHP</title>
 </head>
 <body>
-    <hi>Verificacion de variables en PHP</h1>
-    <p>Validez de las variables</p>
+    <h2>Verificacion de variables en PHP</h2>
+    <p>Validez de las variables:</p>
     <ul>
         <li>$_myvar: <?php echo 'valida';?></li>
         <li>$_7var: <?php echo 'valida';?></li>
@@ -22,5 +22,39 @@
     //liberar variables
     unset($_myvar, $_7var, $myvar, $myvar, $var7, $_element1, $house5);
     ?>
+
+<h2>Asignación de Variables</h2>
+
+<?php
+// Asignaciones iniciales
+$a = "ManejadorSQL";
+$b = 'MySQL';
+$c = &$a;
+
+// Mostrar el contenido inicial
+echo "<p>Valores iniciales:</p>";
+echo "<ul>";
+echo "<li>\$a: "; var_dump($a); echo "</li>";
+echo "<li>\$b: "; var_dump($b); echo "</li>";
+echo "<li>\$c: "; var_dump($c); echo "</li>";
+echo "</ul>";
+
+// Nuevas asignaciones
+$a = "PHP server";
+$b = &$a;
+
+// Mostrar el contenido después de las nuevas asignaciones
+echo "<p>Valores después de las nuevas asignaciones:</p>";
+echo "<ul>";
+echo "<li>\$a: "; var_dump($a); echo "</li>";
+echo "<li>\$b: "; var_dump($b); echo "</li>";
+echo "<li>\$c: "; var_dump($c); echo "</li>";
+echo "</ul>";
+
+// Liberar variables
+unset($a, $b, $c);
+?>
+
+
 </body>
 </html>
