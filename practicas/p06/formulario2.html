@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Concurso Chidos Mis Tenis</title>
+   
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  
+    <style type="text/css">
+        body {
+            background-color: #e0f7fa;
+            font-family: Arial, sans-serif;
+        }
+        
+        h1 {
+            color: #012032;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        p {
+            color: #01579b;
+        }
+
+        form {
+            background-color: #ffffff;
+            border: 1px solid #0288d1;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        input[type="submit"], input[type="reset"] {
+            background-color: #0288d1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        input[type="submit"]:hover, input[type="reset"]:hover {
+            background-color: #0277bd;
+        }
+
+        label {
+            color: #01579b;
+        }
+
+        .form-control {
+            border: 1px solid #0288d1;
+            border-radius: 5px;
+        }
+
+        .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+            background-color: #0288d1;
+            border-color: #0288d1;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-check-input:checked {
+            background-color: #0288d1;
+            border-color: #0288d1;
+        }
+
+        fieldset {
+            border: 1px solid #0288d1;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        legend {
+            color: #065d8f;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Registro al concurso &ldquo;Chidos Mis Tenis&rdquo;</h1>
+
+<p class="text-center">¿Quieres cambiar tus viejos tenis por un par personalizado de Tenis Mike&#174;?<br>Justifica el por qué tus tenis se <em>tienen que</em> ir y tú puedes ser uno de los diez afortunados ganadores.</p>
+
+<form action="http://52.43.117.247/neo/classroom/tw/concurso.php" method="post">
+
+    <fieldset>
+        <legend>Información Personal</legend>
+
+        <div class="form-group">
+            <label for="name">Nombre:</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">E-mail:</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Numero de telefono:</label>
+            <input type="tel" class="form-control" id="phone" name="phone" required>
+        </div>
+
+        <div class="form-group">
+            <label for="story">Cuentanos tu historia, mis tenis son tan feos porque...</label>
+            <textarea class="form-control" id="story" name="story" rows="4" cols="60" maxlength="500" placeholder="Describe tus tenis..." required></textarea>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Diseño personalizado de mis tenis</legend>
+
+        <fieldset>
+            <legend>Color <em>(elije uno)</em></legend>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="color" id="colorRojo" value="Rojo" required>
+                <label class="form-check-label" for="colorRojo">Rojo</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="color" id="colorAzul" value="Azul">
+                <label class="form-check-label" for="colorAzul">Azul</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="color" id="colorNegro" value="Negro">
+                <label class="form-check-label" for="colorNegro">Negro</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="color" id="colorPlateado" value="Plateado">
+                <label class="form-check-label" for="colorPlateado">Plateado</label>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Caracteristicas <em>(escoge las que desees)</em></legend>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="featureCordones" name="features[]" value="Cordones brillantes">
+                <label class="custom-control-label" for="featureCordones">Cordones brillantes</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="featureLogo" name="features[]" value="Logo metálico" checked>
+                <label class="custom-control-label" for="featureLogo">Logo metálico</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="featureSuela" name="features[]" value="Suela luminosa">
+                <label class="custom-control-label" for="featureSuela">Suela luminosa</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="featureWifi" name="features[]" value="WiFi integrado">
+                <label class="custom-control-label" for="featureWifi">WiFi integrado</label>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Elije tu talla</legend>
+            <select class="form-control" id="size" name="size" required>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+            </select>
+        </fieldset>
+    </fieldset>
+
+    <div class="form-group text-center">
+        <input type="submit" value="Enviar mi diseño">
+        <input type="reset" value="Reiniciar">
+    </div>
+
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
