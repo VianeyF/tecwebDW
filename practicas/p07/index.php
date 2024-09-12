@@ -28,5 +28,19 @@ include 'src/funciones.php';
         <input type="text" id="numero" name="numero">
         <button type="submit">Comprobar</button>
     </form>
+
+     <!-- Ejercicio 2: Generar secuencia impar-par-impar -->
+     <h2>Ejercicio 2: Generar secuencia impar-par-impar</h2>
+    <?php
+    if (isset($_POST['generar_numeros'])) {
+        list($numeros, $iteraciones) = generarSecuenciaImparParImpar();
+        echo "<p>Números generados: " . implode(", ", $numeros) . "</p>";
+        echo "<p>Iteraciones: $iteraciones</p>";
+    }
+    ?>
+    <form method="POST" action="">
+        <button type="submit" name="generar_numeros">Generar Secuencia Impar-Par-Impar</button>
+    </form>
+
     </body>
 </html>
