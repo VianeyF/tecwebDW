@@ -59,7 +59,7 @@ if (isset($_POST['generar_numeros'])) {
     </form>-->
 
 <!-- Ejercicio 4: Crear arreglo ASCII 
-     <h2>Ejercicio 4: Crear arreglo de letras ASCII</h2>
+    <h2>Ejercicio 4: Crear arreglo de letras ASCII</h2>
     <?php
     if (isset($_POST['mostrar_arreglo'])) {
         $arreglo = crearArregloASCII();
@@ -74,7 +74,7 @@ if (isset($_POST['generar_numeros'])) {
         <button type="submit" name="mostrar_arreglo">Mostrar Arreglo</button>
     </form>-->
 
-    <!-- Ejercicio 5: Verificar edad y sexo -->
+    <!-- Ejercicio 5: Verificar edad y sexo
     <h2>Ejercicio 5: Verificar Edad y Sexo</h2>
     <?php
     if (isset($_POST['edad']) && isset($_POST['sexo'])) {
@@ -95,8 +95,47 @@ if (isset($_POST['generar_numeros'])) {
         </select>
 
         <button type="submit">Enviar</button>
+    </form>-->
+
+    <!-- Ejercicio 6: Consultar vehículos -->
+    <h2>Ejercicio 6: Consultar Vehiculos</h2>
+    <?php
+    if (isset($_POST['consulta_matricula'])) {
+        $matricula = $_POST['matricula'];
+        $vehiculo = obtenerInformacionVehiculo($matricula);
+
+        if ($vehiculo) {
+            echo "<h3>Informacion del vehiculo con placa $matricula</h3>";
+            echo "<p>Marca: " . $vehiculo['Auto']['marca'] . "</p>";
+            echo "<p>Modelo: " . $vehiculo['Auto']['modelo'] . "</p>";
+            echo "<p>Tipo: " . $vehiculo['Auto']['tipo'] . "</p>";
+            echo "<p>Propietario: " . $vehiculo['Propietario']['nombre'] . "</p>";
+            echo "<p>Ciudad: " . $vehiculo['Propietario']['ciudad'] . "</p>";
+            echo "<p>Direccion: " . $vehiculo['Propietario']['direccion'] . "</p>";
+        } else {
+            echo "<p>No se encontro informacion para la placa $matricula.</p>";
+        }
+    }
+    ?>
+    <form method="POST" action="">
+        <label for="matricula">Ingrese la matrícula:</label>
+        <input type="text" id="matricula" name="matricula" required>
+        <button type="submit" name="consulta_matricula">Consultar</button>
     </form>
 
+    <!-- Botón para consultar todos los vehículos -->
+    <?php
+    if (isset($_POST['consulta_todos'])) {
+        $vehiculos = obtenerParqueVehicular();
+        echo "<h3>Listado de todos los vehículos registrados</h3>";
+        foreach ($vehiculos as $matricula => $vehiculo) {
+            echo "<p>Matricula: $matricula - Marca: " . $vehiculo['Auto']['marca'] . " - Modelo: " . $vehiculo['Auto']['modelo'] . " - Tipo: " . $vehiculo['Auto']['tipo'] . "</p>";
+        }
+    }
+    ?>
+    <form method="POST" action="">
+        <button type="submit" name="consulta_todos">Consultar todos</button>
+    </form>
 
     </body>
 </html>
