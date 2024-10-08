@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Validaciones del lado del servidor
     if (empty($nombre) || strlen($nombre) > 100) {
-        die("El nombre del producto es obligatorio y debe maximo 100 caracteres");
+        die("El nombre del producto puede tener un máximo de 100 caracteres");
     }
 
     // Validar la marca 
@@ -30,17 +30,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Selecciona una marca");
     }
 
-
     if (empty($modelo) || strlen($modelo) > 25) {
-        die("El modelo es obligatorio y debe tener maximo 25 caracteres");
+        die("El modelo puede tener un máximo de 25 caracteres");
     }
 
     if (!is_numeric($precio) || $precio < 99.99) {
-        die("El precio es obligatorio y debe ser mayor a $ 99.99 MXN");
+        die("El precio debe ser mayor a $ 99.99 MXN");
     }
 
     if (strlen($detalles) > 250) {
-        die("Los detalles son opcionales, pero deben tener maximo 250 caracteres");
+        die("Los detalles pueden tener un máximo de 250 caracteres");
     }
 
     if (!is_numeric($unidades) || $unidades < 1) {
@@ -50,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validación del archivo de imagen
     if (!empty($imagen)) {
         $tipoArchivo = strtolower(pathinfo($imagen, PATHINFO_EXTENSION));
-        $rutaArchivo = "uploads/" . basename($imagen);
+        $rutaArchivo = "img/" . basename($imagen);
 
         // Verificar tipo de archivo
         if ($tipoArchivo != "jpg" && $tipoArchivo != "png" && $tipoArchivo != "jpeg") {
@@ -62,27 +61,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             die("Hubo un error al subir la imagen.");
         }
     } else {
-        $rutaArchivo = "ruta/imagen_defecto.png"; 
+        $rutaArchivo = "img/imagen_defecto.png"; 
     }
 
+    // Conectar con la base de datos
     @$link = new mysqli('localhost', 'root', 'vianey24', 'marketzone');
 
     if ($link->connect_errno) {
         die('Falló la conexión: ' . $link->connect_error);
     }
 
-    // insertar los datos
-    $sql = "INSERT INTO productos (nombre, marca, modelo, precio, detalles, unidades, ruta_imagen)
-            VALUES ('$nombre', '$marca', '$modelo', '$precio', '$detalles', '$unidades', '$rutaArchivo')";
+    // Validar que el producto no exista (nombre, marca y modelo deben ser únicos)
+    $sql_check = "SELECT * FROM productos WHERE nombre = '{$nombre}' AND marca = '{$marca}' AND modelo = '{$modelo}'";
+    $result = $link->query($sql_check);
 
-    // Ejecutar la consulta
-    if ($conn->query($sql) === TRUE) {
-        echo "Producto registrado con exito";
+    if ($result->num_rows > 0) {
+        // Producto ya existe, mostrar error
+        echo "<h1>Error: El producto ya existe en la base de datos</h1>";
+        echo "<p>Producto: {$nombre}, Marca: {$marca}, Modelo: {$modelo}</p>";
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        // Insertar el nuevo producto en la base de datos
+        $sql_insert = "INSERT INTO productos (nombre, marca, modelo, precio, detalles, unidades, imagen) 
+                       VALUES ('$nombre', '$marca', '$modelo', '$precio', '$detalles', '$unidades', '$rutaArchivo')";
+
+        if ($link->query($sql_insert)) {
+            // Mostrar resumen del producto insertado
+            echo "<h1>Producto insertado con éxito</h1>";
+            echo "<p><strong>ID:</strong> ".$link->insert_id."</p>";
+            echo "<p><strong>Nombre:</strong> {$nombre}</p>";
+            echo "<p><strong>Marca:</strong> {$marca}</p>";
+            echo "<p><strong>Modelo:</strong> {$modelo}</p>";
+            echo "<p><strong>Precio:</strong> {$precio}</p>";
+            echo "<p><strong>Detalles:</strong> {$detalles}</p>";
+            echo "<p><strong>Unidades disponibles:</strong> {$unidades}</p>";
+            echo "<p><strong>Imagen:</strong> <img src='{$rutaArchivo}' alt='Imagen del producto' style='width:200px;'></p>";
+        } else {
+            // Error al insertar
+            echo "<h1>Error: No se pudo insertar el producto</h1>";
+            echo "<p>Error: ".$link->error."</p>";
+        }
     }
 
-    // Cerrar la conexion
-        $conn->close();
+    // Cerrar la conexión
+    $link->close();
 }
 ?>

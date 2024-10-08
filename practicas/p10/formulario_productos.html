@@ -67,7 +67,7 @@
             var unidades = parseInt(document.getElementById("unidades_producto").value);
 
             if (nombre === "" || nombre.length >100) {
-                alert("El nombre del producto es obligatorio y debe tener maximo 100 caracteres");
+                alert("El nombre del producto puede tener un maximo de 100 caracteres");
                 return false;
             }
 
@@ -77,22 +77,22 @@
             }
 
             if (modelo === "" || modelo.length > 25) {
-                alert("El modelo es obligatorio y debe tener maximo 25 caracteres");
+                alert("El modelo solo puede tener un maximo de 25 caracteres");
                 return false;
             }
 
             if (isNaN(precio) || precio < 99.99) {
-                alert("El precio es obligatorio y debe ser mayor a $ 99.99");
+                alert("El precio debe ser mayor a $ 99.99");
                 return false;
             }
 
             if (detalles.length >250) {
-                alert("Agregar detalles es opcional, pero si se agregan deben tener maximo 250 caracteres");
+                alert("Detalles puede tener un maximo de 250 caracteres");
                 return false;
             }
 
             if (isNaN(unidades) || unidades < 1) {
-                alert("Las unidades por producto deben ser al menos 1");
+                alert("El producto debe tener al menos una unidad en existencia");
                 return false;
             }
 
@@ -116,7 +116,7 @@
         <div class="form-group">
             <label for="marca_producto">Marca:</label>
             <select class="form-control" id="marca_producto" name="marca_producto" required>
-                <option value="">Selecciona una marca</option> <!-- Opción predeterminada vacía -->
+                <option value="">Selecciona una marca</option> 
                 <option value="Lego">Lego</option>
                 <option value="Fisher Price">Fisher Price</option>
                 <option value="Nenuco">Nenuco</option>
