@@ -243,9 +243,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['id'])) {
             <div class="form-group">
                 <label>Imagen del producto:</label>
                 <?php if (isset($imagen) && !empty($imagen)): ?>
-                    <img src="<?= htmlspecialchars($imagen) ?>" alt="Imagen del producto" class="img-thumbnail" />
+                    <img src="<?= htmlspecialchars($imagen) ?>" alt="Imagen del producto" class="img-thumbnail" style="max-width: 200px; height: auto;" />
                 <?php else: ?>
-                    <img src="img/imagen_defecto.png" alt="Imagen por defecto" class="img-thumbnail" />
+                    <img src="img/imagen_defecto.png" alt="Imagen por defecto" class="img-thumbnail" style="max-width: 200px; height: auto;" />
                 <?php endif; ?>
             </div>
 
