@@ -1,0 +1,5 @@
+validación campos:
+http://localhost/tecwebDW/practicas/p10/formulario_productos.html
+actualización:
+http://localhost/tecwebDW/practicas/p10/get_productos_xhtml_v2.php?tope=500
+http://localhost/tecwebDW/practicas/p10/get_productos_vigentes_v2.php
