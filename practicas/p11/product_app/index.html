@@ -1,65 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Product App</title>
-  </head>
-  <body onload="init()">
+<body onload="init()">
 
-    <!-- BARRA DE NAVEGACIÓN  -->
-    <nav>
+  <!-- BARRA DE NAVEGACIÓN -->
+  <nav>
       <a href="#">Product App</a>
-      <!-- Si no necesitas un menú, puedes eliminar este <ul> -->
       <ul></ul>
       
       <!-- FORMULARIO DE BÚSQUEDA POR ID -->
       <form onsubmit="buscarID(event)">
-        <input name="search" id="searchID" type="search" placeholder="Buscar por ID">
-        <button type="button" onclick="buscarID(event)">Buscar por ID</button>
+          <input name="search" id="searchID" type="search" placeholder="Buscar por ID" required>
+          <button type="submit">Buscar por ID</button>
       </form>
-    </nav>
+  </nav>
 
-    <div>
+  <div>
       <div>
-        <!-- FORMULARIO PARA BÚSQUEDA POR NOMBRE, MARCA O DETALLES -->
-        <form id="task-form">
-          <div>
-            <input type="search" id="searchTerm" placeholder="Buscar por nombre, marca o detalles">
-            <button type="button" onclick="buscarProductoPlus(event)">Buscar Producto</button>
-          </div>
-          
-          <!-- AREA PARA MOSTRAR EL JSON DEL PRODUCTO -->
-          <div>
-            <textarea id="description" cols="30" rows="10" placeholder="JSON de producto"></textarea>
-          </div>
-          
-          <!-- ELEMENTO HIDDEN PARA IDENTIFICAR EL PRODUCTO CUANDO SE AGREGA -->
-          <input type="hidden" id="taskId">
-
-          <!-- BOTÓN PARA AGREGAR PRODUCTO -->
-          <button type="button" onclick="agregarProducto(event)">Agregar Producto</button>
-        </form>
+          <!-- FORMULARIO PARA BÚSQUEDA POR NOMBRE, MARCA O DETALLES -->
+          <form id="task-form" onsubmit="agregarProducto(event)">
+              <div>
+                  <input type="search" id="searchTerm" placeholder="Buscar por nombre, marca o detalles">
+                  <button type="button" onclick="buscarProductoPlus(event)">Buscar Producto</button>
+              </div>
+              
+              <!-- CAMPOS PARA AGREGAR UN NUEVO PRODUCTO -->
+              <div>
+                  <input type="text" id="nombre" placeholder="Nombre del producto" required>
+                  <select id="marca" required>
+                      <option value="">Selecciona una marca</option>
+                      <option value="Lego">Lego</option>
+                      <option value="Fisher Price">Fisher Price</option>
+                      <option value="Nenuco">Nenuco</option>
+                      <option value="Hasbro">Hasbro</option>
+                      <option value="Mattel">Mattel</option>
+                  </select>
+                  <input type="text" id="modelo" placeholder="Modelo" required>
+                  <input type="number" id="precio" placeholder="Precio" required step="0.01">
+                  <input type="number" id="unidades" placeholder="Unidades" required min="1">
+                  <textarea id="detalles" placeholder="Detalles (opcional)" maxlength="250"></textarea>
+                  <input type="text" id="imagen" placeholder="Ruta de la imagen (opcional)" value="img/imagen_defecto.png">
+              </div>
+              
+              <!-- BOTÓN PARA AGREGAR PRODUCTO -->
+              <button type="submit">Agregar Producto</button>
+          </form>
       </div>
+
+      <!-- CAMPO TEXTAREA PARA MOSTRAR JSON -->
+      <textarea id="description" cols="30" rows="10" placeholder="JSON de producto"></textarea> <!-- Agregado -->
 
       <!-- TABLA PARA MOSTRAR LOS PRODUCTOS -->
       <div>
-        <!-- Lista vacía, si no se usa puede eliminarse -->
-        <ul></ul>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Id</th>
-              <th>Nombre</th>
-              <th>Descripción</th>
-            </tr>
-          </thead>
-          <tbody id="productos"></tbody>
-        </table>
+          <ul></ul>
+          <table>
+              <thead>
+                  <tr>
+                      <th>Id</th>
+                      <th>Nombre</th>
+                      <th>Descripcion</th>
+                  </tr>
+              </thead>
+              <tbody id="productos"></tbody>
+          </table>
       </div>
-    </div>
+  </div>
 
-    <!-- Lógica del Frontend -->
-    <script src="./app.js"></script>
-  </body>
-</html>
+  <!-- Lógica del Frontend -->
+  <script src="./app.js"></script>
+</body>
