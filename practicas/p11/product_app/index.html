@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Product App</title>
+  </head>
+  <body onload="init()">
+
+    <!-- BARRA DE NAVEGACIÓN  -->
+    <nav>
+      <a href="#">Product App</a>
+      <!-- Si no necesitas un menú, puedes eliminar este <ul> -->
+      <ul></ul>
+      
+      <!-- FORMULARIO DE BÚSQUEDA POR ID -->
+      <form onsubmit="buscarID(event)">
+        <input name="search" id="searchID" type="search" placeholder="Buscar por ID">
+        <button type="button" onclick="buscarID(event)">Buscar por ID</button>
+      </form>
+    </nav>
+
+    <div>
+      <div>
+        <!-- FORMULARIO PARA BÚSQUEDA POR NOMBRE, MARCA O DETALLES -->
+        <form id="task-form">
+          <div>
+            <input type="search" id="searchTerm" placeholder="Buscar por nombre, marca o detalles">
+            <button type="button" onclick="buscarProductoPlus(event)">Buscar Producto</button>
+          </div>
+          
+          <!-- AREA PARA MOSTRAR EL JSON DEL PRODUCTO -->
+          <div>
+            <textarea id="description" cols="30" rows="10" placeholder="JSON de producto"></textarea>
+          </div>
+          
+          <!-- ELEMENTO HIDDEN PARA IDENTIFICAR EL PRODUCTO CUANDO SE AGREGA -->
+          <input type="hidden" id="taskId">
+
+          <!-- BOTÓN PARA AGREGAR PRODUCTO -->
+          <button type="button" onclick="agregarProducto(event)">Agregar Producto</button>
+        </form>
+      </div>
+
+      <!-- TABLA PARA MOSTRAR LOS PRODUCTOS -->
+      <div>
+        <!-- Lista vacía, si no se usa puede eliminarse -->
+        <ul></ul>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Nombre</th>
+              <th>Descripción</th>
+            </tr>
+          </thead>
+          <tbody id="productos"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Lógica del Frontend -->
+    <script src="./app.js"></script>
+  </body>
+</html>
