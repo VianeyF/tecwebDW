@@ -52,12 +52,12 @@ function highlightMatch(text, search) {
     // Si no hay término de búsqueda o no coincide, devolvemos el texto original
     if (!search) return text;
     console.log("Resaltando coincidencias para:", search); // Agregamos este log
-
     let regex = new RegExp(`(${search})`, 'gi'); // Expresión regular para búsqueda insensible a mayúsculas
     let highlightedText = text.replace(regex, `<span class="highlight">$1</span>`); // Resaltamos el texto
     console.log("Texto resaltado:", highlightedText); // Mostramos el texto resaltado en consola
     return highlightedText; // Devolvemos el texto resaltado
 }
+
 $('#search-form').on('submit', function (e) {
     e.preventDefault();
     let search = $('#search').val().trim().toLowerCase();
@@ -71,43 +71,54 @@ $('#search-form').on('submit', function (e) {
             let productos = JSON.parse(response);
             let template = '';
             let template_bar = '';
+
             if (productos.length === 0) {
                 template_bar = `<li>No se encontraron productos</li>`;
-            }
+            } else {
                 productos.forEach(function (producto) {
-                let nombre = highlightMatch(producto.nombre, search);
-                let modelo = highlightMatch(producto.modelo, search);
-                let marca = highlightMatch(producto.marca, search);
-                let detalles = highlightMatch(producto.detalles, search);
-            
-                let descripcion = `<li>precio: ${producto.precio}</li>
-                                   <li>unidades: ${producto.unidades}</li>
-                                   <li>modelo: ${modelo}</li>  <!-- Aplicando el resaltado aquí -->
-                                   <li>marca: ${marca}</li>    <!-- Aplicando el resaltado aquí -->
-                                   <li>detalles: ${detalles}</li>`;  <!-- Aplicando el resaltado aquí -->
-            
-                template += `<tr productId="${producto.id}">
-                               <td>${producto.id}</td>
-                               <td>${nombre}</td>  <!-- Aplicando el resaltado aquí -->
-                               <td><ul>${descripcion}</ul></td>
-                               <td>
-                                   <button class="product-delete btn btn-danger">Eliminar</button>
-                               </td>
-                             </tr>`;
-            
-                template_bar += `<li>${nombre}</li>`;
-            });
+                    let id = highlightMatch(producto.id.toString(), search);  
+                    let nombre = highlightMatch(producto.nombre, search);
+                    let modelo = highlightMatch(producto.modelo, search);
+                    let marca = highlightMatch(producto.marca, search);
+                    let detalles = highlightMatch(producto.detalles, search);
+
+                    let descripcion = `
+                        <li>precio: ${producto.precio}</li>
+                        <li>unidades: ${producto.unidades}</li>
+                        <li>modelo: ${modelo}</li>  <!-- Aplicando el resaltado aquí -->
+                        <li>marca: ${marca}</li>    <!-- Aplicando el resaltado aquí -->
+                        <li>detalles: ${detalles}</li>`;
+
+                    template += `
+                        <tr productId="${producto.id}">
+                            <td>${producto.id}</td>
+                            <td>${nombre}</td>  <!-- Aplicando el resaltado aquí -->
+                            <td><ul>${descripcion}</ul></td>
+                            <td>
+                                <button class="product-delete btn btn-danger">Eliminar</button>
+                            </td>
+                        </tr>`;
+
+                    template_bar += `<li>${nombre}</li>`;
+                });
+            }
+
             console.log(template); // Verificamos que el HTML generado contenga las etiquetas <span>
             $('#container').html(template_bar);
             $('#products').html(template);
+
+            // SE HACE VISIBLE LA BARRA DE ESTADO
+            document.getElementById("product-result").className = "card my-4 d-block";
         },
-        error: function () {
+        error: function (error) {
             console.error("Error en la búsqueda:", error); // Verificar errores
-            $('#container').html('<li>Error en la búsqueda</li>');
+            let template_bar = `<li>Error en la búsqueda</li>`;
+            $('#container').html(template_bar);
+            // SE HACE VISIBLE LA BARRA DE ESTADO
+            document.getElementById("product-result").className = "card my-4 d-block";
         }
     });
 });
-
 
 
 $('#product-form').on('submit', function (e) {
@@ -115,7 +126,6 @@ $('#product-form').on('submit', function (e) {
     let productoJsonString = $('#description').val();
     let finalJSON = JSON.parse(productoJsonString);
     finalJSON['nombre'] = $('#name').val();
-
     $.ajax({
         url: './backend/product-add.php',
         method: 'POST',
@@ -123,28 +133,54 @@ $('#product-form').on('submit', function (e) {
         data: JSON.stringify(finalJSON),
         success: function (response) {
             let respuesta = JSON.parse(response);
-            let template_bar = `<li>status: ${respuesta.status}</li>
-                                <li>message: ${respuesta.message}</li>`;
-            $('#container').html(template_bar);
+            let template_bar = `
+                <li style="list-style: none;">status: ${respuesta.status}</li>
+                <li style="list-style: none;">message: ${respuesta.message}</li>
+            `;
+            // SE HACE VISIBLE LA BARRA DE ESTADO
+            document.getElementById("product-result").className = "card my-4 d-block";
+            // SE INSERTA LA PLANTILLA PARA LA BARRA DE ESTADO
+            document.getElementById("container").innerHTML = template_bar;
+
             listarProductos();
+        },
+        error: function () {
+            let template_bar = `
+                <li style="list-style: none;">status: error</li>
+                <li style="list-style: none;">message: Error en la solicitud AJAX</li>
+            `;
+            document.getElementById("container").innerHTML = template_bar;
         }
     });
 });
 
+
 $(document).on('click', '.product-delete', function () {
     if (confirm("De verdad deseas eliminar el Producto")) {
         let id = $(this).closest('tr').attr('productId');
-
         $.ajax({
             url: './backend/product-delete.php',
             method: 'GET',
             data: { id: id },
             success: function (response) {
                 let respuesta = JSON.parse(response);
-                let template_bar = `<li>status: ${respuesta.status}</li>
-                                    <li>message: ${respuesta.message}</li>`;
-                $('#container').html(template_bar);
+                let template_bar = `
+                    <li style="list-style: none;">status: ${respuesta.status}</li>
+                    <li style="list-style: none;">message: ${respuesta.message}</li>
+                `;
+                // SE HACE VISIBLE LA BARRA DE ESTADO
+                document.getElementById("product-result").className = "card my-4 d-block";
+                // SE INSERTA LA PLANTILLA PARA LA BARRA DE ESTADO
+                document.getElementById("container").innerHTML = template_bar;
+
                 listarProductos();
+            },
+            error: function () {
+                let template_bar = `
+                    <li style="list-style: none;">status: error</li>
+                    <li style="list-style: none;">message: Error en la solicitud AJAX</li>
+                `;
+                document.getElementById("container").innerHTML = template_bar;
             }
         });
     }
