@@ -48,43 +48,67 @@ function listarProductos() {
     });
 }
 
+function highlightMatch(text, search) {
+    // Si no hay término de búsqueda o no coincide, devolvemos el texto original
+    if (!search) return text;
+    console.log("Resaltando coincidencias para:", search); // Agregamos este log
+
+    let regex = new RegExp(`(${search})`, 'gi'); // Expresión regular para búsqueda insensible a mayúsculas
+    let highlightedText = text.replace(regex, `<span class="highlight">$1</span>`); // Resaltamos el texto
+    console.log("Texto resaltado:", highlightedText); // Mostramos el texto resaltado en consola
+    return highlightedText; // Devolvemos el texto resaltado
+}
 $('#search-form').on('submit', function (e) {
     e.preventDefault();
-    let search = $('#search').val();
-
+    let search = $('#search').val().trim().toLowerCase();
+    console.log("Valor de búsqueda:", search); // Para verificar que se obtiene el valor
     $.ajax({
         url: './backend/product-search.php',
         method: 'GET',
         data: { search: search },
         success: function (response) {
+            console.log("Respuesta del servidor:", response); // Para verificar la respuesta
             let productos = JSON.parse(response);
             let template = '';
             let template_bar = '';
-
-            productos.forEach(function (producto) {
+            if (productos.length === 0) {
+                template_bar = `<li>No se encontraron productos</li>`;
+            }
+                productos.forEach(function (producto) {
+                let nombre = highlightMatch(producto.nombre, search);
+                let modelo = highlightMatch(producto.modelo, search);
+                let marca = highlightMatch(producto.marca, search);
+                let detalles = highlightMatch(producto.detalles, search);
+            
                 let descripcion = `<li>precio: ${producto.precio}</li>
                                    <li>unidades: ${producto.unidades}</li>
-                                   <li>modelo: ${producto.modelo}</li>
-                                   <li>marca: ${producto.marca}</li>
-                                   <li>detalles: ${producto.detalles}</li>`;
-
+                                   <li>modelo: ${modelo}</li>  <!-- Aplicando el resaltado aquí -->
+                                   <li>marca: ${marca}</li>    <!-- Aplicando el resaltado aquí -->
+                                   <li>detalles: ${detalles}</li>`;  <!-- Aplicando el resaltado aquí -->
+            
                 template += `<tr productId="${producto.id}">
                                <td>${producto.id}</td>
-                               <td>${producto.nombre}</td>
+                               <td>${nombre}</td>  <!-- Aplicando el resaltado aquí -->
                                <td><ul>${descripcion}</ul></td>
                                <td>
                                    <button class="product-delete btn btn-danger">Eliminar</button>
                                </td>
                              </tr>`;
-
-                template_bar += `<li>${producto.nombre}</li>`;
+            
+                template_bar += `<li>${nombre}</li>`;
             });
-
+            console.log(template); // Verificamos que el HTML generado contenga las etiquetas <span>
             $('#container').html(template_bar);
             $('#products').html(template);
+        },
+        error: function () {
+            console.error("Error en la búsqueda:", error); // Verificar errores
+            $('#container').html('<li>Error en la búsqueda</li>');
         }
     });
 });
+
+
 
 $('#product-form').on('submit', function (e) {
     e.preventDefault();
