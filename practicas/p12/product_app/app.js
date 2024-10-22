@@ -214,8 +214,10 @@ $('#product-form').on('submit', function (e) {
     let finalJSON = JSON.parse(productoJsonString);
     finalJSON['nombre'] = $('#name').val();
     
-    let productId = $('#productId').val(); // Obtenemos el ID del producto (si existe)
 
+
+
+    let productId = $('#productId').val(); // Obtenemos el ID del producto (si existe)
     let url = productId ? './backend/product-update.php' : './backend/product-add.php'; 
 
     $.ajax({
