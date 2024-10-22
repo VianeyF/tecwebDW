@@ -39,7 +39,9 @@ function listarProductos() {
                                <td>${producto.nombre}</td>
                                <td><ul>${descripcion}</ul></td>
                                <td>
-                                   <button class="product-delete btn btn-danger">Eliminar</button>
+                                   <button class="product-delete btn btn-primary mb-2">Eliminar</button>                        
+                                   <button class="product-edit btn btn-info mt-2">Editar</button>
+
                                </td>
                              </tr>`;
             });
@@ -94,9 +96,6 @@ $('#search-form').on('submit', function (e) {
                             <td>${producto.id}</td>
                             <td>${nombre}</td>  <!-- Aplicando el resaltado aquí -->
                             <td><ul>${descripcion}</ul></td>
-                            <td>
-                                <button class="product-delete btn btn-danger">Eliminar</button>
-                            </td>
                         </tr>`;
 
                     template_bar += `<li>${nombre}</li>`;
@@ -184,4 +183,73 @@ $(document).on('click', '.product-delete', function () {
             }
         });
     }
+});
+
+// Función para editar producto
+$(document).on('click', '.product-edit', function () {
+    let id = $(this).closest('tr').attr('productId');
+    $.ajax({
+        url: './backend/product-get.php',  
+        method: 'GET',
+        data: { id: id },
+        success: function (response) {
+            let producto = JSON.parse(response);
+
+            // Cargar los datos en el formulario
+            $('#name').val(producto.nombre);
+            $('#description').val(JSON.stringify(producto, null, 2));
+            $('#productId').val(producto.id); // Guardamos el ID en un campo oculto
+
+            // Cambiar el botón de agregar por "Actualizar"
+            //$('button[type="submit"]').text('Actualizar Producto');
+            $('#product-submit-btn').text('Actualizar Producto');
+        }
+    });
+});
+
+// Modificación del formulario para manejar la actualización
+$('#product-form').on('submit', function (e) {
+    e.preventDefault();
+    let productoJsonString = $('#description').val();
+    let finalJSON = JSON.parse(productoJsonString);
+    finalJSON['nombre'] = $('#name').val();
+    
+    let productId = $('#productId').val(); // Obtenemos el ID del producto (si existe)
+
+    let url = productId ? './backend/product-update.php' : './backend/product-add.php'; 
+
+    $.ajax({
+        url: url,
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(finalJSON),
+        success: function (response) {
+            let respuesta = JSON.parse(response);
+            let template_bar = `
+                <li style="list-style: none;">status: ${respuesta.status}</li>
+                <li style="list-style: none;">message: ${respuesta.message}</li>
+            `;
+
+            // Actualizamos la barra de estado
+            document.getElementById("product-result").className = "card my-4 d-block";
+            document.getElementById("container").innerHTML = template_bar;
+
+            // Volver a listar los productos
+            listarProductos();
+
+            // Reiniciar el formulario
+            $('#product-form')[0].reset();
+            $('#productId').val(''); // Limpiamos el campo oculto
+            //$('button[type="submit"]').text('Agregar Producto'); // Volvemos a cambiar el botón
+            $('#product-submit-btn').text('Actualizar Producto');
+
+        },
+        error: function () {
+            let template_bar = `
+                <li style="list-style: none;">status: error</li>
+                <li style="list-style: none;">message: Error en la solicitud AJAX</li>
+            `;
+            document.getElementById("container").innerHTML = template_bar;
+        }
+    });
 });
