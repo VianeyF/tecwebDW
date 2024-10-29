@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <?php
+    requiere_once__DIR__.'/Operacion.php';
+    $suma = new Suma;
+    $suma->setValor1(10); //metodo heredadodefinido e la clase operacion
+    $suma->setValor2(10); //metodo hereddo definido e la clase operacion
+    $suma->operar(); //metodo definido e la clase suma
+
+    echo 'El resultado es:'.$suma->getResultado().'<br>';
+
+    $resta = new Resta;
+    $resta->setValor1(10); //metodo heredadodefinido e la clase operacion
+    $resta->setValor2(5); //metodo hereddo definido e la clase operacion
+    $resta->operar(); //metodo definido e la clase suma
+
+    echo 'El resultado es:'.$resta->getResultado().'<br>';
+
+
+    ?>
+</body>
+</html>
