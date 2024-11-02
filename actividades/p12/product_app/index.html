@@ -1,86 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>ProductApp</title>
-    <!-- BOOTSTRAP 4  -->
-    <link rel="stylesheet" href="https://bootswatch.com/4/superhero/bootstrap.min.css">
-    <style>
-      .highlight {
-        background-color: rgb(255, 0, 0);
-        font-weight: bold;
-      }
-    </style>
-    <script src="js/validarFormulario.js" defer></script> <!-- Ruta al archivo de validación -->
-  </head>
-  <body onload="init()">
 
-    <!-- BARRA DE NAVEGACIÓN  -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href=".">ProductApp</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+<head>
+  <meta charset="UTF-8">
+  <title>ProductApp</title>
+  <!-- BOOTSTRAP 4  -->
+  <link rel="stylesheet" href="https://bootswatch.com/4/superhero/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="frontend/js/validarFormulario.js" defer></script> <!-- Ruta al archivo de validación -->
+</head>
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto"></ul>
-          <form class="form-inline my-2 my-lg-0" id="search-form">
-            <input class="form-control mr-sm-2" name="search" id="search" type="search" placeholder="ID, marca o descripción" aria-label="Search">
-            <button class="btn btn-success my-2 my-sm-0" type="submit">Buscar</button>
-          </form>
-      </div>
-    </nav>
+<body onload="init()">
 
-    <div class="container">
-      <div class="row p-4">
-        <div class="col-md-5">
-          <div class="card">
-            <div class="card-body">
-              <!-- FORMULARIO PARA AGREGAR PRODUCTO-->
-              <form id="product-form">
-                <div class="form-group">
-                  <input class="form-control" type="text" id="name" placeholder="Nombre de producto">
-                </div>
-                <div class="form-group">
-                  <textarea class="form-control" id="description" cols="30" rows="10" placeholder="JSON de producto"></textarea>
-                </div>
-                <input type="hidden" id="productId">
-                <button id="product-submit-btn" class="btn btn-primary btn-block text-center" type="submit">
-                  Agregar Producto
-                </button>
-              </form>
-            </div>
+  <!-- BARRA DE NAVEGACIÓN  -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href=".">ProductApp</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto"></ul>
+      <form class="form-inline my-2 my-lg-0" id="search-form">
+        <input class="form-control mr-sm-2" name="search" id="search" type="search"
+          placeholder="ID, marca o descripción" aria-label="Search">
+        <button class="btn btn-success my-2 my-sm-0" type="submit">Buscar</button>
+      </form>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row p-4">
+      <div class="col-md-5">
+        <div class="card">
+          <div class="card-body">
+            <!-- FORMULARIO PARA AGREGAR PRODUCTO-->
+
+            <form id="product-form">
+              <div class="form-group">
+                <label for="nombre">Nombre del producto:</label>
+                <input type="text" class="form-control" id="nombre_producto" name="nombre"
+                  value="<?= isset($_GET['nombre']) ? htmlspecialchars($_GET['nombre']) : '' ?>"
+                  onblur="validarNombre()" required>
+              </div>
+
+              <div class="form-group">
+                <label for="marca">Marca:</label>
+                <select class="form-control" id="marca_producto" name="marca" onblur="validarMarca()" required>
+                  <option value="">Selecciona una marca</option>
+                  <option value="Lego" <?=(isset($_GET['marca']) && $_GET['marca']=='Lego' ) ? 'selected' : '' ?>>Lego
+                  </option>
+                  <option value="Fisher Price" <?=(isset($_GET['marca']) && $_GET['marca']=='Fisher Price' )
+                    ? 'selected' : '' ?>>Fisher Price</option>
+                  <option value="Nenuco" <?=(isset($_GET['marca']) && $_GET['marca']=='Nenuco' ) ? 'selected' : '' ?>
+                    >Nenuco</option>
+                  <option value="Hasbro" <?=(isset($_GET['marca']) && $_GET['marca']=='Hasbro' ) ? 'selected' : '' ?>
+                    >Hasbro</option>
+                  <option value="Mattel" <?=(isset($_GET['marca']) && $_GET['marca']=='Mattel' ) ? 'selected' : '' ?>
+                    >Mattel</option>
+                  <option value="Barbie" <?=(isset($_GET['marca']) && $_GET['marca']=='Barbie' ) ? 'selected' : '' ?>
+                    >Barbie</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="modelo">Modelo:</label>
+                <input type="text" class="form-control" id="modelo_producto" name="modelo_producto"
+                  value="<?= isset($_GET['modelo']) ? htmlspecialchars($_GET['modelo']) : '' ?>" placeholder="XX-000"
+                  onblur="validarModelo()" required>
+              </div>
+
+              <div class="form-group">
+                <label for="precio">Precio (MXN):</label>
+                <input type="number" step="0.01" class="form-control" id="precio_producto" name="precio"
+                  value="<?= isset($_GET['precio']) ? htmlspecialchars($_GET['precio']) : '' ?>"
+                  placeholder="Ej. $99.99" onblur="validarPrecio()" required>
+              </div>
+
+              <div class="form-group">
+                <label for="detalles">Detalles (opcional):</label>
+                <textarea class="form-control" id="detalles_producto" name="detalles" rows="4"
+                  placeholder="Escribe los detalles del producto"
+                  onblur="validarDetalles()"><?= isset($_GET['detalles']) ? htmlspecialchars($_GET['detalles']) : '' ?></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="unidades">Unidades disponibles:</label>
+                <input type="number" class="form-control" id="unidades_producto" name="unidades" min="1"
+                  value="<?= isset($_GET['unidades']) ? htmlspecialchars($_GET['unidades']) : '' ?>"
+                  onblur="validarUnidades()" required>
+              </div>
+
+              <div class="form-group">
+                <label for="imagen_producto">Imagen del producto:</label>
+                <input type="file" class="form-control" id="imagen_producto" name="imagen_producto" accept="image/*">
+              </div>
+
+              <input type="hidden" id="productId">
+              <button id="product-submit-btn" class="btn btn-primary btn-block text-center" type="submit">
+                Agregar Producto
+              </button>
+            </form>
           </div>
         </div>
+      </div>
 
-        <!-- TABLA  -->
-        <div class="col-md-7">
-          <div class="card my-4 d-none" id="product-result">
-            <div class="card-body">
-              <!-- RESULTADO -->
-              <ul id="container"></ul>
-            </div>
+      <!-- TABLA  -->
+      <div class="col-md-7">
+        <div class="card my-4 d-none" id="product-result">
+          <div class="card-body">
+            <!-- RESULTADO -->
+            <ul id="container"></ul>
           </div>
-          <table class="table table-bordered table-sm">
-            <thead>
-              <tr>
-                <td>Id</td>
-                <td>Nombre</td>
-                <td>Descripción</td>
-              </tr>
-            </thead>
-            <tbody id="products">
-            </tbody>
-          </table>
+        </div>
+        <table class="table table-bordered table-sm">
+          <thead>
+            <tr>
+              <td>Id</td>
+              <td>Nombre</td>
+              <td>Descripción</td>
+            </tr>
+          </thead>
+          <tbody id="products">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Error -->
+  <div class="modal fade" id="error-modal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="errorModalLabel">Error</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrarModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="error-mensaje"></p> <!-- Aquí se mostrará el mensaje de error -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="cerrarModal()">Cerrar</button>
         </div>
       </div>
     </div>
+  </div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-      crossorigin="anonymous"></script>
-    <!-- Lógica del Frontend -->
-    <script src="app.js"></script>
-  </body>
+  <script>
+    document.getElementById('product-form').addEventListener('submit', function (event) {
+      const imagenProducto = document.getElementById('imagen_producto');
+
+      // Si no se selecciona una imagen, asigna la ruta de la imagen por defecto
+      if (imagenProducto.files.length === 0) {
+        const defaultImageInput = document.createElement('input');
+        defaultImageInput.type = 'hidden';
+        defaultImageInput.name = 'imagen_producto';
+        defaultImageInput.value = 'img/default.png';
+        this.appendChild(defaultImageInput);
+      }
+    });
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+  <!-- Lógica del Frontend -->
+  <script src="frontend/js/app.js"></script>
+</body>
 
 </html>

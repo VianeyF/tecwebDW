@@ -1,19 +1,10 @@
 // JSON BASE A MOSTRAR EN FORMULARIO
-var baseJSON = {
-    "precio": 0.0,
-    "unidades": 1,
-    "modelo": "XX-000",
-    "marca": "NA",
-    "detalles": "NA",
-    "imagen": "img/default.png"
-  };
-
 function init() {
     /**
      * Convierte el JSON a string para poder mostrarlo
      * ver: https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/JSON
      */
-    var JsonString = JSON.stringify(baseJSON,null,2);
+    var JsonString = JSON.stringify(baseJSON, null, 2);
     document.getElementById("description").value = JsonString;
 
     // SE LISTAN TODOS LOS PRODUCTOS
@@ -78,7 +69,7 @@ $('#search-form').on('submit', function (e) {
                 template_bar = `<li>No se encontraron productos</li>`;
             } else {
                 productos.forEach(function (producto) {
-                    let id = highlightMatch(producto.id.toString(), search);  
+                    let id = highlightMatch(producto.id.toString(), search);
                     let nombre = highlightMatch(producto.nombre, search);
                     let modelo = highlightMatch(producto.modelo, search);
                     let marca = highlightMatch(producto.marca, search);
@@ -189,7 +180,7 @@ $(document).on('click', '.product-delete', function () {
 $(document).on('click', '.product-edit', function () {
     let id = $(this).closest('tr').attr('productId');
     $.ajax({
-        url: './backend/product-get.php',  
+        url: './backend/product-get.php',
         method: 'GET',
         data: { id: id },
         success: function (response) {
@@ -213,12 +204,12 @@ $('#product-form').on('submit', function (e) {
     let productoJsonString = $('#description').val();
     let finalJSON = JSON.parse(productoJsonString);
     finalJSON['nombre'] = $('#name').val();
-    
+
 
 
 
     let productId = $('#productId').val(); // Obtenemos el ID del producto (si existe)
-    let url = productId ? './backend/product-update.php' : './backend/product-add.php'; 
+    let url = productId ? './backend/product-update.php' : './backend/product-add.php';
 
     $.ajax({
         url: url,
