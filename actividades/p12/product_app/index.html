@@ -6,12 +6,11 @@
   <title>ProductApp</title>
   <!-- BOOTSTRAP 4  -->
   <link rel="stylesheet" href="https://bootswatch.com/4/superhero/bootstrap.min.css">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="frontend/css/style.css">
   <script src="frontend/js/validarFormulario.js" defer></script> <!-- Ruta al archivo de validación -->
 </head>
 
 <body onload="init()">
-
   <!-- BARRA DE NAVEGACIÓN  -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href=".">ProductApp</a>
@@ -40,63 +39,56 @@
             <form id="product-form">
               <div class="form-group">
                 <label for="nombre">Nombre del producto:</label>
-                <input type="text" class="form-control" id="nombre_producto" name="nombre"
-                  value="<?= isset($_GET['nombre']) ? htmlspecialchars($_GET['nombre']) : '' ?>"
-                  onblur="validarNombre()" required>
+                <input type="text" class="form-control" id="nombre_producto" name="nombre" >
               </div>
 
               <div class="form-group">
                 <label for="marca">Marca:</label>
-                <select class="form-control" id="marca_producto" name="marca" onblur="validarMarca()" required>
+                <select class="form-control" id="marca_producto" name="marca">
                   <option value="">Selecciona una marca</option>
-                  <option value="Lego" <?=(isset($_GET['marca']) && $_GET['marca']=='Lego' ) ? 'selected' : '' ?>>Lego
+                  <option value="Lego" <?=(isset($_GET['marca']) && $_GET['marca']=='Lego' ) ? 'selected' : '' ?>Lego
                   </option>
                   <option value="Fisher Price" <?=(isset($_GET['marca']) && $_GET['marca']=='Fisher Price' )
-                    ? 'selected' : '' ?>>Fisher Price</option>
+                    ? 'selected' : '' ?>Fisher Price</option>
                   <option value="Nenuco" <?=(isset($_GET['marca']) && $_GET['marca']=='Nenuco' ) ? 'selected' : '' ?>
-                    >Nenuco</option>
+                    Nenuco</option>
                   <option value="Hasbro" <?=(isset($_GET['marca']) && $_GET['marca']=='Hasbro' ) ? 'selected' : '' ?>
-                    >Hasbro</option>
+                    Hasbro</option>
                   <option value="Mattel" <?=(isset($_GET['marca']) && $_GET['marca']=='Mattel' ) ? 'selected' : '' ?>
-                    >Mattel</option>
+                    Mattel</option>
                   <option value="Barbie" <?=(isset($_GET['marca']) && $_GET['marca']=='Barbie' ) ? 'selected' : '' ?>
-                    >Barbie</option>
+                    Barbie</option>
                 </select>
               </div>
 
               <div class="form-group">
                 <label for="modelo">Modelo:</label>
-                <input type="text" class="form-control" id="modelo_producto" name="modelo_producto"
-                  value="<?= isset($_GET['modelo']) ? htmlspecialchars($_GET['modelo']) : '' ?>" placeholder="XX-000"
-                  onblur="validarModelo()" required>
+                <input type="text" class="form-control" id="modelo_producto" name="modelo_producto" 
+                placeholder="XX-000">
               </div>
 
               <div class="form-group">
                 <label for="precio">Precio (MXN):</label>
                 <input type="number" step="0.01" class="form-control" id="precio_producto" name="precio"
-                  value="<?= isset($_GET['precio']) ? htmlspecialchars($_GET['precio']) : '' ?>"
-                  placeholder="Ej. $99.99" onblur="validarPrecio()" required>
+                  placeholder="Ej. $99.99">
               </div>
 
               <div class="form-group">
                 <label for="detalles">Detalles (opcional):</label>
                 <textarea class="form-control" id="detalles_producto" name="detalles" rows="4"
                   placeholder="Escribe los detalles del producto"
-                  onblur="validarDetalles()"><?= isset($_GET['detalles']) ? htmlspecialchars($_GET['detalles']) : '' ?></textarea>
+                  ></textarea>
               </div>
 
               <div class="form-group">
                 <label for="unidades">Unidades disponibles:</label>
-                <input type="number" class="form-control" id="unidades_producto" name="unidades" min="1"
-                  value="<?= isset($_GET['unidades']) ? htmlspecialchars($_GET['unidades']) : '' ?>"
-                  onblur="validarUnidades()" required>
+                <input type="number" class="form-control" id="unidades_producto" name="unidades" 
+                  >
               </div>
-
               <div class="form-group">
                 <label for="imagen_producto">Imagen del producto:</label>
                 <input type="file" class="form-control" id="imagen_producto" name="imagen_producto" accept="image/*">
               </div>
-
               <input type="hidden" id="productId">
               <button id="product-submit-btn" class="btn btn-primary btn-block text-center" type="submit">
                 Agregar Producto
@@ -168,8 +160,8 @@
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"
     integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-  <!-- Lógica del Frontend -->
-  <script src="frontend/js/app.js"></script>
+  <!-- Lógica del Frontend 
+  <script src="frontend/js/app.js"></script> -->
 </body>
 
 </html>
