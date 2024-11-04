@@ -3,37 +3,6 @@ function init() {
     listarProductos();
 }
 
-/*Listar productos
-function listarProductos() {
-    $.ajax({
-        url: './backend/product-list.php',
-        method: 'GET',
-        success: function (response) {
-            let productos = JSON.parse(response);
-            let template = '';
-
-            productos.forEach(function (producto) {
-                let descripcion = `<li>precio: ${producto.precio}</li>
-                                   <li>unidades: ${producto.unidades}</li>
-                                   <li>modelo: ${producto.modelo}</li>
-                                   <li>marca: ${producto.marca}</li>
-                                   <li>detalles: ${producto.detalles}</li>`;
-
-                template += `<tr productId="${producto.id}">
-                               <td>${producto.id}</td>
-                               <td>${producto.nombre}</td>
-                               <td><ul>${descripcion}</ul></td>
-                               <td>
-                                   <button class="product-delete btn btn-primary mb-2">Eliminar</button>                        
-                                   <button class="product-edit btn btn-info mt-2">Editar</button>
-                               </td>
-                             </tr>`;
-            });
-            $('#products').html(template);
-        }
-    });
-}*/
-
 // Función para listar productos
 function listarProductos() {
     $.ajax({
@@ -65,28 +34,22 @@ function listarProductos() {
     });
 }
 
-//iluminar busqueda
+// Función para resaltar coincidencias en la búsqueda
 function highlightMatch(text, search) {
-    // Si no hay término de búsqueda o no coincide, devolvemos el texto original
     if (!search) return text;
-    console.log("Resaltando coincidencias para:", search); // Agregamos este log
-    let regex = new RegExp(`(${search})`, 'gi'); // Expresión regular para búsqueda insensible a mayúsculas
-    let highlightedText = text.replace(regex, `<span class="highlight">$1</span>`); // Resaltamos el texto
-    console.log("Texto resaltado:", highlightedText); // Mostramos el texto resaltado en consola
-    return highlightedText; // Devolvemos el texto resaltado
+    let regex = new RegExp(`(${search})`, 'gi');
+    return text.replace(regex, `<span class="highlight">$1</span>`);
 }
 
-//Buscar proucto
+// Buscar producto
 $('#search-form').on('submit', function (e) {
     e.preventDefault();
     let search = $('#search').val().trim().toLowerCase();
-    console.log("Valor de búsqueda:", search); // Para verificar que se obtiene el valor
     $.ajax({
         url: './backend/product-search.php',
         method: 'GET',
         data: { search: search },
         success: function (response) {
-            console.log("Respuesta del servidor:", response); // Para verificar la respuesta
             let productos = JSON.parse(response);
             let template = '';
             let template_bar = '';
@@ -95,7 +58,6 @@ $('#search-form').on('submit', function (e) {
                 template_bar = `<li>No se encontraron productos</li>`;
             } else {
                 productos.forEach(function (producto) {
-                    let id = highlightMatch(producto.id.toString(), search);
                     let nombre = highlightMatch(producto.nombre, search);
                     let modelo = highlightMatch(producto.modelo, search);
                     let marca = highlightMatch(producto.marca, search);
@@ -104,14 +66,14 @@ $('#search-form').on('submit', function (e) {
                     let descripcion = `
                         <li>precio: ${producto.precio}</li>
                         <li>unidades: ${producto.unidades}</li>
-                        <li>modelo: ${modelo}</li>  <!-- Aplicando el resaltado aquí -->
-                        <li>marca: ${marca}</li>    <!-- Aplicando el resaltado aquí -->
+                        <li>modelo: ${modelo}</li>
+                        <li>marca: ${marca}</li>
                         <li>detalles: ${detalles}</li>`;
 
                     template += `
                         <tr productId="${producto.id}">
                             <td>${producto.id}</td>
-                            <td>${nombre}</td>  <!-- Aplicando el resaltado aquí -->
+                            <td>${nombre}</td>
                             <td><ul>${descripcion}</ul></td>
                         </tr>`;
 
@@ -119,24 +81,18 @@ $('#search-form').on('submit', function (e) {
                 });
             }
 
-            console.log(template); // Verificamos que el HTML generado contenga las etiquetas <span>
             $('#container').html(template_bar);
             $('#products').html(template);
-
-            // SE HACE VISIBLE LA BARRA DE ESTADO
             document.getElementById("product-result").className = "card my-4 d-block";
         },
-        error: function (error) {
-            console.error("Error en la búsqueda:", error); // Verificar errores
-            let template_bar = `<li>Error en la búsqueda</li>`;
-            $('#container').html(template_bar);
-            // SE HACE VISIBLE LA BARRA DE ESTADO
+        error: function () {
+            $('#container').html('<li>Error en la búsqueda</li>');
             document.getElementById("product-result").className = "card my-4 d-block";
         }
     });
 });
 
-//Borrar producto
+// Eliminar producto
 $(document).on('click', '.product-delete', function () {
     if (confirm("De verdad deseas eliminar el Producto")) {
         let id = $(this).closest('tr').attr('productId');
@@ -148,59 +104,109 @@ $(document).on('click', '.product-delete', function () {
                 let respuesta = JSON.parse(response);
                 let template_bar = `
                     <li style="list-style: none;">status: ${respuesta.status}</li>
-                    <li style="list-style: none;">message: ${respuesta.message}</li>
-                `;
-                // SE HACE VISIBLE LA BARRA DE ESTADO
+                    <li style="list-style: none;">message: ${respuesta.message}</li>`;
                 document.getElementById("product-result").className = "card my-4 d-block";
-                // SE INSERTA LA PLANTILLA PARA LA BARRA DE ESTADO
                 document.getElementById("container").innerHTML = template_bar;
 
                 listarProductos();
             },
             error: function () {
-                let template_bar = `
-                    <li style="list-style: none;">status: error</li>
-                    <li style="list-style: none;">message: Error en la solicitud AJAX</li>
-                `;
-                document.getElementById("container").innerHTML = template_bar;
+                document.getElementById("container").innerHTML = '<li>Error en la solicitud AJAX</li>';
             }
         });
     }
 });
 
-//Agregar producto
-$('#product-form').on('submit', function (e) {
-    e.preventDefault();
-    let productoJsonString = $('#description').val();
-    let finalJSON = JSON.parse(productoJsonString);
-    finalJSON['nombre'] = $('#name').val();
-    $.ajax({
-        url: './backend/product-add.php',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(finalJSON),
-        success: function (response) {
-            let respuesta = JSON.parse(response);
-            let template_bar = `
-                <li style="list-style: none;">status: ${respuesta.status}</li>
-                <li style="list-style: none;">message: ${respuesta.message}</li>
-            `;
-            // SE HACE VISIBLE LA BARRA DE ESTADO
-            document.getElementById("product-result").className = "card my-4 d-block";
-            // SE INSERTA LA PLANTILLA PARA LA BARRA DE ESTADO
-            document.getElementById("container").innerHTML = template_bar;
-
-            listarProductos();
-        },
-        error: function () {
-            let template_bar = `
-                <li style="list-style: none;">status: error</li>
-                <li style="list-style: none;">message: Error en la solicitud AJAX</li>
-            `;
-            document.getElementById("container").innerHTML = template_bar;
-        }
+$(document).ready(function () {
+    // Validaciones en tiempo real
+    $('#nombre_producto, #precio_producto, #unidades_producto, #marca_producto, #modelo_producto, #detalles_producto').on('input', function () {
+        validarCampo($(this));
     });
 });
+
+// Agregar o actualizar producto con validación completa
+$('#product-form').on('submit', function (e) {
+    e.preventDefault();
+
+    // Verificar validaciones antes de enviar
+    if (validarFormularioCompleto()) {
+        $('#product-submit-btn').prop('disabled', true);
+        let finalJSON = {
+            nombre: $('#nombre_producto').val(),
+            precio: $('#precio_producto').val(),
+            unidades: $('#unidades_producto').val(),
+            marca: $('#marca_producto').val(),
+            modelo: $('#modelo_producto').val(),
+            detalles: $('#detalles_producto').val(),
+            id: $('#productId').val()
+        };
+
+        let url = finalJSON.id ? './backend/product-update.php' : './backend/product-add.php';
+        console.log(finalJSON);
+
+        $.ajax({
+            url: url,
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(finalJSON),
+            dataType: 'json',
+            success: function (response) {
+                $('#product-submit-btn').prop('disabled', false);
+                if (response.status === 'success') {
+                    $('#container').html(`<li style="list-style: none;">status: ${response.status}</li>
+                                      <li style="list-style: none;">message: ${response.message}</li>`);
+                    document.getElementById("product-result").className = "card my-4 d-block";
+                    listarProductos();
+                    $('#product-form')[0].reset();
+                    $('#productId').val('');
+                    $('#product-submit-btn').text('Agregar Producto');
+                } else {
+                    // Manejar el caso en que no sea exitoso
+                    $('#container').html(`<li style="list-style: none;">status: ${response.status}</li>
+                                      <li style="list-style: none;">message: ${response.message}</li>`);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error('Error en la solicitud:', textStatus, errorThrown); // Log para depuración
+                $('#product-submit-btn').prop('disabled', false);
+                mostrarError("Hubo un error al enviar el formulario.");
+            }
+        });
+    } else {
+
+        mostrarError("Por favor, llena los campos requeridos.");
+    }
+});
+
+// Función de validación de campo
+function validarCampo(campo) {
+    // Aquí va la lógica para validar cada campo
+    let valor = campo.val();
+    if (valor === '') {
+        campo.addClass('is-invalid');
+        campo.removeClass('is-valid');
+    } else {
+        campo.addClass('is-valid');
+        campo.removeClass('is-invalid');
+    }
+}
+
+// Función para validar el formulario completo
+function validarFormularioCompleto() {
+    console.log("Todos los campos son válidos, enviando el formulario...");
+    let isValid = true;
+    $('#nombre_producto, #precio_producto, #unidades_producto, #marca_producto, #modelo_producto, #detalles_producto').each(function () {
+        if ($(this).val() === '') {
+            isValid = false;
+            $(this).addClass('is-invalid');
+        } else {
+            $(this).removeClass('is-invalid');
+        }
+    });
+    return isValid;
+}
+
+
 
 // Función para editar producto
 $(document).on('click', '.product-edit', function () {
@@ -227,63 +233,6 @@ $(document).on('click', '.product-edit', function () {
         },
         error: function () {
             console.log('Error al obtener la información del producto.');
-        }
-    });
-});
-
-// Evento de envío del formulario
-$('#product-form').on('submit', function (e) {
-    e.preventDefault();
-
-    // Creamos el JSON directamente desde los campos del formulario
-    let finalJSON = {
-        nombre: $('#nombre_producto').val(),
-        precio: $('#precio_producto').val(),
-        unidades: $('#unidades_producto').val(),
-        marca: $('#marca_producto').val(),
-        modelo: $('#modelo_producto').val(),
-        detalles: $('#detalles_producto').val(),
-        id: $('#productId').val() // Usar este campo para determinar si es una actualización
-    };
-
-    // Determinamos la URL en función de si es una actualización o una adición
-    let url = finalJSON.id ? './backend/product-update.php' : './backend/product-add.php';
-
-    $.ajax({
-        url: url,
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(finalJSON),
-        success: function (response) {
-            try {
-                let respuesta = JSON.parse(response);
-                let template_bar = `
-                    <li style="list-style: none;">status: ${respuesta.status}</li>
-                    <li style="list-style: none;">message: ${respuesta.message}</li>
-                `;
-
-                // Actualizamos la barra de estado
-                document.getElementById("product-result").className = "card my-4 d-block";
-                document.getElementById("container").innerHTML = template_bar;
-
-                // Volver a listar los productos
-                listarProductos();
-
-                // Reiniciar el formulario y cambiar el botón a "Agregar Producto"
-                $('#product-form')[0].reset();
-                $('#productId').val('');
-                $('#product-submit-btn').text('Agregar Producto');
-            } catch (error) {
-                console.error("Error al parsear la respuesta JSON:", error);
-                console.log("Respuesta recibida:", response);
-            }
-        },
-        error: function () {
-            let template_bar = `
-                <li style="list-style: none;">status: error</li>
-                <li style="list-style: none;">message: Error en la solicitud AJAX</li>
-            `;
-            document.getElementById("container").innerHTML = template_bar;
         }
     });
 });
