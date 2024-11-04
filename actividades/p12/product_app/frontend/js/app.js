@@ -122,6 +122,10 @@ $(document).ready(function () {
     $('#nombre_producto, #precio_producto, #unidades_producto, #marca_producto, #modelo_producto, #detalles_producto').on('input', function () {
         validarCampo($(this));
     });
+    // Validación en tiempo real para el campo de nombre del producto
+    $('#nombre_producto').on('input', function () {
+        verificarNombreProducto($(this).val());
+    });
 });
 
 // Agregar o actualizar producto con validación completa
@@ -206,8 +210,6 @@ function validarFormularioCompleto() {
     return isValid;
 }
 
-
-
 // Función para editar producto
 $(document).on('click', '.product-edit', function () {
     let id = $(this).closest('tr').attr('productId');
@@ -236,3 +238,29 @@ $(document).on('click', '.product-edit', function () {
         }
     });
 });
+
+//Funcion para verificar coincidencias en nombre
+function verificarNombreProducto(nombre) {
+    if (nombre.trim() === '') return; // No hacer nada si el campo está vacío
+
+    $.ajax({
+        url: './backend/product-rev-name.php',
+        method: 'GET',
+        data: { nombre: nombre },
+        success: function (response) {
+            let resultado = JSON.parse(response);
+            if (resultado.existe) {
+                $('#nombre_producto').addClass('is-invalid');
+                $('#nombre_producto').removeClass('is-valid');
+                $('#mensaje-error').text('El nombre del producto ya existe').show();
+            } else {
+                $('#nombre_producto').removeClass('is-invalid');
+                $('#nombre_producto').addClass('is-valid');
+                $('#mensaje-error').hide();
+            }
+        },
+        error: function () {
+            console.error('Error al verificar el nombre del producto.');
+        }
+    });
+}
