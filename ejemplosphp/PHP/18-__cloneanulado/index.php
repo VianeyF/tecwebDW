@@ -9,15 +9,18 @@
 <body>
     <?php
         require_once __DIR__ . '/Persona.php';
-
+        
         $per1 = new Persona;
-        $per1->inicializar('Fulano');
-        $per1->mostrar();
+        $per1->fijarNombreEdad('Juan', 20);
+        echo 'Datos de la persona ($per1): ';
+        echo $per1->retornarNombre().' - '.$per1->retornarEdad();
 
-        $per2 = new Persona;
-        $per2->inicializar('Mengano');
-        $per2->mostrar();
+        echo '<br>';
+        $per2 = clone($per1);
+
+        echo 'Datos de la persona ($per2): ';
+        echo $per2->retornarNombre().' - '.$per2->retornarEdad();
     ?>
-
+    
 </body>
 </html>

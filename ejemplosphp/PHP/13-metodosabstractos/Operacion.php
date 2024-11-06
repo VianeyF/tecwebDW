@@ -1,5 +1,5 @@
 <?php
-class Operacion {
+abstract class Operacion {
     protected $valor1;
     protected $valor2;
     protected $resultado;
@@ -21,17 +21,21 @@ class Operacion {
     public function getResultado() {
         return $this->resultado;
     }
+
+    abstract public function operar();
 }
 
-// SE HEREDA DE LA CLASE Operacion
 class Suma extends Operacion {
+    // ESTE MÉTODO SE DEBE IMPLEMENTAR SIEMPRE
+    // DE NO IMPLEMENTARSE SE OBTENDRÁ UN ERROR DE INMEDIATO
     public function operar() {
         $this->resultado = $this->valor1 + $this->valor2;
     }
 }
 
-// SE HEREDA DE LA CLASE Operacion
 class Resta extends Operacion {
+    // ESTE MÉTODO SE DEBE IMPLEMENTAR SIEMPRE
+    // DE NO IMPLEMENTARSE SE OBTENDRÁ UN ERROR DE INMEDIATO
     public function operar() {
         $this->resultado = $this->valor1 - $this->valor2;
     }

@@ -23,17 +23,29 @@ class Operacion {
     }
 }
 
-// SE HEREDA DE LA CLASE Operacion
-class Suma extends Operacion {
+// SE DECLARA LA CLASE Suma COMO final
+final class Suma extends Operacion {
     public function operar() {
         $this->resultado = $this->valor1 + $this->valor2;
     }
 }
 
-// SE HEREDA DE LA CLASE Operacion
-class Resta extends Operacion {
+// LA SIGUIENTE DECLARACIÓN GENERARÁ EL SIGUIENTE ERROR:
+// Class SumaTresValores may not inherit from final class (Suma)
+/*class SumaTresValores extends Suma {
+
+}*/
+
+// SE DECLARA LA CLASE Resta COMO final
+final class Resta extends Operacion {
     public function operar() {
         $this->resultado = $this->valor1 - $this->valor2;
     }
 }
+
+// LA SIGUIENTE DECLARACIÓN GENERARÁ EL SIGUIENTE ERROR:
+// Class SumaTresValores may not inherit from final class (Resta)
+/*class RestaTresValores extends Resta {
+
+}*/
 ?>

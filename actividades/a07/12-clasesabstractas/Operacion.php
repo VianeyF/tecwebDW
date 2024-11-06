@@ -1,5 +1,5 @@
 <?php
-class Operacion {
+abstract class Operacion {
     protected $valor1;
     protected $valor2;
     protected $resultado;

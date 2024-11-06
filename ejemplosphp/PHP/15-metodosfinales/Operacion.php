@@ -18,22 +18,32 @@ class Operacion {
         $this->valor2 = $val;
     }
 
-    public function getResultado() {
+    final public function getResultado() {
         return $this->resultado;
     }
 }
 
-// SE HEREDA DE LA CLASE Operacion
 class Suma extends Operacion {
     public function operar() {
         $this->resultado = $this->valor1 + $this->valor2;
     }
+
+    // LA SIGUIENTE DECLARACIÓN GENERARÁ EL SIGUIENTE ERROR:
+    // Cannot override final method Operacion::getResultado()
+    /*public function getResultado() {
+
+    }*/
 }
 
-// SE HEREDA DE LA CLASE Operacion
 class Resta extends Operacion {
     public function operar() {
         $this->resultado = $this->valor1 - $this->valor2;
     }
+
+    // LA SIGUIENTE DECLARACIÓN GENERARÁ EL SIGUIENTE ERROR:
+    // Cannot override final method Operacion::getResultado()
+    /*public function getResultado() {
+
+    }*/
 }
 ?>

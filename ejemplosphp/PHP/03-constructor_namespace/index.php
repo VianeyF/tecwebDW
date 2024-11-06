@@ -8,15 +8,11 @@
 </head>
 <body>
     <?php
-        require_once __DIR__ . '/Persona.php';
+        use EJEMPLOS\POO\Cabecera2 as Cabecera;
+        require_once __DIR__ . '/Cabecera.php';
 
-        $per1 = new Persona;
-        $per1->inicializar('Fulano');
-        $per1->mostrar();
-
-        $per2 = new Persona;
-        $per2->inicializar('Mengano');
-        $per2->mostrar();
+        $cab1 = new Cabecera('El rincón del Programador', 'center', 'https://wwww.twitter.com');
+        $cab1->graficar();
     ?>
 
 </body>
