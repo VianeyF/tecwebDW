@@ -1,0 +1,17 @@
+.highlight {
+    background-color: rgb(255, 0, 0);
+    font-weight: bold;
+  }
+/* Estilo para campos inválidos */
+.is-invalid {
+  border: 2px solid #dc3545; /* Rojo para indicar error */
+  background-color: #f8d7da; /* Fondo ligero para mayor visibilidad */
+  color: #721c24; /* Texto oscuro para contraste */
+}
+
+/* Estilo para campos válidos */
+.is-valid {
+  border: 2px solid #28a745; /* Verde para indicar éxito */
+  background-color: #d4edda; /* Fondo claro para validación exitosa */
+  color: #155724; /* Texto oscuro para contraste */
+}
