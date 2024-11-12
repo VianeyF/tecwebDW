@@ -1,0 +1,15 @@
+{
+    "name": "fvian/myapi",
+    "autoload": {
+        "psr-4": {
+            "Fvian\\Myapi\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "fvianey",
+            "email": "rocio.floresfl@alumno.buap.mx"
+        }
+    ],
+    "require": {}
+}
