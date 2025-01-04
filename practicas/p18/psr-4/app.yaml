@@ -1,4 +1,4 @@
-runtime: php81  # Cambia la versión de PHP según la que uses
+runtime: php82  # Cambia la versión de PHP según la que uses
 env: standard
 
 handlers:
