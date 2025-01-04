@@ -1,1 +1,21 @@
-runtime: python312
+runtime: php81  # Cambia la versión de PHP según la que uses
+env: standard
+
+handlers:
+  # Manejo de recursos estáticos (HTML, CSS, JS, imágenes, etc.)
+  - url: /(.*\.(html|css|js|png|jpg|gif|ico|svg|webp|ttf|woff|woff2|eot))
+    static_files: \1
+    upload: (.*\.(html|css|js|png|jpg|gif|ico|svg|webp|ttf|woff|woff2|eot))
+
+  # Manejo del archivo index.html como la página principal
+  - url: /
+    static_files: index.html
+    upload: index.html
+
+  # Rutas para manejar archivos PHP
+  - url: /.*
+    script: auto
+
+runtime_config:
+  document_root: psr-4 
+
